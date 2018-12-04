@@ -11,14 +11,20 @@
 #include <fmod_errors.h>
 #include <SFML/Window.hpp>
 #include "SimpleAudioManager.h"
+#include "AudioManager.h"
 
 void exitOnError(FMOD_RESULT result) {
     if (result != FMOD_OK) {
-        // std::cout << FMOD_ErrorString(result) << std::endl;
+        std::cout << FMOD_ErrorString(result) << std::endl;
         exit(-1);
     }
 }
 
+int main(int argc, const char *argv[]) {
+    return 0;
+}
+
+/*
 int main(int argc, const char * argv[]) {
     sf::Window window(sf::VideoMode(320, 240), "AudioPlayback");
     sf::Clock clock;
@@ -43,6 +49,6 @@ int main(int argc, const char * argv[]) {
         am.update(elapsed);
     }
     
-
     return 0;
 }
+*/

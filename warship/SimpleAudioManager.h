@@ -19,7 +19,7 @@ class SimpleAudioManager {
 public:
     SimpleAudioManager();
     ~SimpleAudioManager();
-    void update(float elapsed);
+    void update(double elapsed);
     void load(const std::string &path);
     void stream(const std::string &path);
     void play(const std::string &path);
@@ -48,7 +48,7 @@ SAM::~SimpleAudioManager() {
     system = nullptr;
 }
 
-void SAM::update(float elapsed) {
+void SAM::update(double elapsed) {
     system->update();
 }
 
