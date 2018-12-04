@@ -7,24 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F210E7A21B6392900C52A48 /* libfmodL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F210E7921B6392900C52A48 /* libfmodL.dylib */; };
+		3F210E7C21B6393300C52A48 /* libfmodstudioL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F210E7B21B6393300C52A48 /* libfmodstudioL.dylib */; };
 		3F60E2C721B531AA0094C35F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F60E2C621B531AA0094C35F /* main.cpp */; };
+		3F874BA121B64EE500BCBEE3 /* libfmodstudioL.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F210E7B21B6393300C52A48 /* libfmodstudioL.dylib */; };
+		3F874BA221B64EEA00BCBEE3 /* libfmodL.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F210E7921B6392900C52A48 /* libfmodL.dylib */; };
+		3F874BA521B656A500BCBEE3 /* 003.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F874BA421B656A500BCBEE3 /* 003.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3F60E2C121B531A90094C35F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			buildActionMask = 12;
+			dstPath = "/Users/Nerrons/Library/Developer/Xcode/DerivedData/warship-hczfiamwfeunbychlywzjomktuoq/Build/Products/Debug";
 			dstSubfolderSpec = 0;
 			files = (
+				3F874BA521B656A500BCBEE3 /* 003.mp3 in CopyFiles */,
+				3F874BA221B64EEA00BCBEE3 /* libfmodL.dylib in CopyFiles */,
+				3F874BA121B64EE500BCBEE3 /* libfmodstudioL.dylib in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3F210E7921B6392900C52A48 /* libfmodL.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfmodL.dylib; path = warship/libfmodL.dylib; sourceTree = "<group>"; };
+		3F210E7B21B6393300C52A48 /* libfmodstudioL.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfmodstudioL.dylib; path = warship/libfmodstudioL.dylib; sourceTree = "<group>"; };
+		3F210E7D21B6395900C52A48 /* libfmod.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfmod.dylib; path = warship/libfmod.dylib; sourceTree = "<group>"; };
+		3F210E7F21B6395F00C52A48 /* libfmodstudio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfmodstudio.dylib; path = warship/libfmodstudio.dylib; sourceTree = "<group>"; };
 		3F60E2C321B531AA0094C35F /* warship */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = warship; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F60E2C621B531AA0094C35F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		3F60E2C621B531AA0094C35F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = warship/main.cpp; sourceTree = SOURCE_ROOT; };
+		3F60E2CE21B581760094C35F /* SimpleAudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleAudioManager.h; sourceTree = "<group>"; };
+		3F874BA421B656A500BCBEE3 /* 003.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 003.mp3; path = warship/003.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,17 +46,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F210E7C21B6393300C52A48 /* libfmodstudioL.dylib in Frameworks */,
+				3F210E7A21B6392900C52A48 /* libfmodL.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F210E7821B6392900C52A48 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3F210E7F21B6395F00C52A48 /* libfmodstudio.dylib */,
+				3F210E7D21B6395900C52A48 /* libfmod.dylib */,
+				3F210E7B21B6393300C52A48 /* libfmodstudioL.dylib */,
+				3F210E7921B6392900C52A48 /* libfmodL.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3F60E2BA21B531A90094C35F = {
 			isa = PBXGroup;
 			children = (
+				3F874BA421B656A500BCBEE3 /* 003.mp3 */,
 				3F60E2C521B531AA0094C35F /* warship */,
 				3F60E2C421B531AA0094C35F /* Products */,
+				3F210E7821B6392900C52A48 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				3F60E2C621B531AA0094C35F /* main.cpp */,
+				3F60E2CE21B581760094C35F /* SimpleAudioManager.h */,
 			);
 			path = warship;
 			sourceTree = "<group>";
@@ -72,6 +102,7 @@
 				3F60E2BF21B531A90094C35F /* Sources */,
 				3F60E2C021B531A90094C35F /* Frameworks */,
 				3F60E2C121B531A90094C35F /* CopyFiles */,
+				3F874BA321B6504F00BCBEE3 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -112,6 +143,26 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3F874BA321B6504F00BCBEE3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#install_name_tool -change ./libfmodL.dylib @loader_path/../Frameworks/libfmodL.dylib “$TARGET_BUILD_DIR/$PRODUCT_NAME”\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3F60E2BF21B531A90094C35F /* Sources */ = {
@@ -160,6 +211,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7RC9R8AS63;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -176,10 +228,25 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Users/Nerrons/fmod/api/lowlevel/inc,
+					/Users/Nerrons/fmod/api/studio/inc,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					/Users/Nerrons/fmod/api/studio/lib/libfmodstudioL.dylib,
+					/Users/Nerrons/fmod/api/lowlevel/lib/libfmodL.dylib,
+					"/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/warshipped/warship/libsfml-window.dylib",
+					"/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/warshipped/warship/libsfml-graphics.dylib",
+					"/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/warshipped/warship/libsfml-system.dylib",
+				);
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -219,6 +286,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7RC9R8AS63;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -229,9 +297,24 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Users/Nerrons/fmod/api/lowlevel/inc,
+					/Users/Nerrons/fmod/api/studio/inc,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					/Users/Nerrons/fmod/api/studio/lib/libfmodstudioL.dylib,
+					/Users/Nerrons/fmod/api/lowlevel/lib/libfmodL.dylib,
+					"/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/warshipped/warship/libsfml-window.dylib",
+					"/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/warshipped/warship/libsfml-graphics.dylib",
+					"/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/warshipped/warship/libsfml-system.dylib",
+				);
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -239,16 +322,32 @@
 		3F60E2CB21B531AA0094C35F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7RC9R8AS63;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/warship",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
 		3F60E2CC21B531AA0094C35F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7RC9R8AS63;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/warship",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
