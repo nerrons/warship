@@ -7,9 +7,42 @@
 //
 
 #include <iostream>
+#include <fmod.hpp>
+#include <fmod_errors.h>
+#include <SFML/Window.hpp>
+#include "SimpleAudioManager.h"
+
+void exitOnError(FMOD_RESULT result) {
+    if (result != FMOD_OK) {
+        // std::cout << FMOD_ErrorString(result) << std::endl;
+        exit(-1);
+    }
+}
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    sf::Window window(sf::VideoMode(320, 240), "AudioPlayback");
+    sf::Clock clock;
+    
+    SimpleAudioManager am;
+    am.load("003.mp3");
+    
+    while (window.isOpen()) {
+        double elapsed = clock.getElapsedTime().asSeconds();
+        if (elapsed < 1.0 / 60.0) continue;
+        clock.restart();
+        sf::Event e;
+        while (window.pollEvent(e)) {
+            if (e.type == sf::Event::Closed) {
+                window.close();
+            }
+            if (e.type == sf::Event::KeyPressed
+                && e.key.code == sf::Keyboard::Space ) {
+                am.play("003.mp3");
+            }
+        }
+        am.update(elapsed);
+    }
+    
+
     return 0;
 }
