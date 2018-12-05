@@ -10,7 +10,7 @@
 #include <fmod.hpp>
 #include <fmod_errors.h>
 #include <SFML/Window.hpp>
-#include "SimpleAudioManager.h"
+// #include "SimpleAudioManager.h"
 #include "AudioManager.h"
 
 void exitOnError(FMOD_RESULT result) {
@@ -46,18 +46,10 @@ int main(int argc, const char *argv[]) {
                     am.StopAllSFXs();
                 } else if (e.key.code == sf::Keyboard::S) {
                     am.StopSongs();
-                } else if (e.key.code == sf::Keyboard::Num0) {
+                } else if (e.key.code == sf::Keyboard::Left) {
                     am.SetMasterVolume(0.0);
-                } else if (e.key.code == sf::Keyboard::Num1) {
-                    am.SetSongsVolume(0.2);
-                } else if (e.key.code == sf::Keyboard::Num2) {
-                    am.SetSongsVolume(0.4);
-                } else if (e.key.code == sf::Keyboard::Num3) {
-                    am.SetSongsVolume(0.6);
-                } else if (e.key.code == sf::Keyboard::Num4) {
-                    am.SetSongsVolume(0.8);
-                } else if (e.key.code == sf::Keyboard::Num5) {
-                    am.SetSongsVolume(1.0);
+                } else if (e.key.code == sf::Keyboard::Right) {
+                    am.SetMasterVolume(1.0);
                 }
             }
         }
@@ -65,32 +57,3 @@ int main(int argc, const char *argv[]) {
     }
     return 0;
 }
-
-/*
-int main(int argc, const char * argv[]) {
-    sf::Window window(sf::VideoMode(320, 240), "AudioPlayback");
-    sf::Clock clock;
-    
-    SimpleAudioManager am;
-    am.load("003.mp3");
-    
-    while (window.isOpen()) {
-        double elapsed = clock.getElapsedTime().asSeconds();
-        if (elapsed < 1.0 / 60.0) continue;
-        clock.restart();
-        sf::Event e;
-        while (window.pollEvent(e)) {
-            if (e.type == sf::Event::Closed) {
-                window.close();
-            }
-            if (e.type == sf::Event::KeyPressed
-                && e.key.code == sf::Keyboard::Space ) {
-                am.play("003.mp3");
-            }
-        }
-        am.update(elapsed);
-    }
-    
-    return 0;
-}
-*/

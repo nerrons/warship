@@ -73,10 +73,14 @@ double ChangeSemitone(double freq, double offset) {
     return freq * pow(semitone_ratio, offset);
 }
 
-AM::AudioManager() : current_song(nullptr), fade_state(FADE_NONE), fade_time(1.5) {
+AM::AudioManager()
+: current_song(nullptr)
+, fade_state(FADE_NONE)
+, fade_time(1.5) {
     // create system
     FMOD::System_Create(&system);
     system->init(500, FMOD_INIT_NORMAL, 0);
+    system->getMasterChannelGroup(&master);
     
     // create channels for each cat
     for (int i = 0; i < CATEGORY_COUNT; i++) {
@@ -205,7 +209,8 @@ void AM::Update(double elapsed) {
         current_song->getVolume(&volume);
         float new_volume = volume - elapsed / fade_time;
         if (new_volume <= 0.0) {
-            current_song->setVolume(0.0f);
+            current_song->stop();
+            current_song_path.clear();
             fade_state = FADE_NONE;
         } else {
             current_song->setVolume(new_volume);
