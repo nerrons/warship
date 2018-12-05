@@ -15,6 +15,9 @@
 #ifndef AudioManager_h
 #define AudioManager_h
 
+static std::random_device rd;
+static std::mt19937 rng(rd());
+
 class AudioManager {
 public:
     AudioManager();
@@ -70,7 +73,7 @@ double ChangeSemitone(double freq, double offset) {
     return freq * pow(semitone_ratio, offset);
 }
 
-AM::AudioManager() : current_song(nullptr), fade_state(FADE_NONE) {
+AM::AudioManager() : current_song(nullptr), fade_state(FADE_NONE), fade_time(1.5) {
     // create system
     FMOD::System_Create(&system);
     system->init(500, FMOD_INIT_NORMAL, 0);
@@ -84,9 +87,6 @@ AM::AudioManager() : current_song(nullptr), fade_state(FADE_NONE) {
     // setup modes for each cat
     modes[CATEGORY_SFX] = FMOD_DEFAULT;
     modes[CATEGORY_SONG] = FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_LOOP_NORMAL;
-    
-    // random generator used for SFXs
-    srand((unsigned)time(0));
 }
 
 AM::~AudioManager() {
@@ -131,12 +131,10 @@ void AM::PlaySFX(const std::string &path,
     if (sound == sounds[CATEGORY_SFX].end()) return;
     
     // calc random volume and pitch
-    std::random_device rand_dev;
-    std::mt19937 gen(rand_dev);
-    std::uniform_real_distribution<double> new_volume_dist(minVolume, maxVolume);
-    std::uniform_real_distribution<double> new_pitch_dist(minPitch, maxPitch);
-    float new_volume = new_volume_dist(gen);
-    float new_pitch = new_pitch_dist(gen);
+    std::uniform_real_distribution<> new_volume_dist(minVolume, maxVolume);
+    std::uniform_real_distribution<> new_pitch_dist(minPitch, maxPitch);
+    float new_volume = new_volume_dist(rng);
+    float new_pitch = new_pitch_dist(rng);
     
     // start a new channel; add to channel group
     // play the sfx with the volume and pitch

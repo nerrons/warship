@@ -13,6 +13,7 @@
 		3F874BA121B64EE500BCBEE3 /* libfmodstudioL.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F210E7B21B6393300C52A48 /* libfmodstudioL.dylib */; };
 		3F874BA221B64EEA00BCBEE3 /* libfmodL.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F210E7921B6392900C52A48 /* libfmodL.dylib */; };
 		3F874BA521B656A500BCBEE3 /* 003.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F874BA421B656A500BCBEE3 /* 003.mp3 */; };
+		3F874BA921B75C1A00BCBEE3 /* ysf.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F874BA821B75C1900BCBEE3 /* ysf.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -22,6 +23,7 @@
 			dstPath = "/Users/Nerrons/Library/Developer/Xcode/DerivedData/warship-hczfiamwfeunbychlywzjomktuoq/Build/Products/Debug";
 			dstSubfolderSpec = 0;
 			files = (
+				3F874BA921B75C1A00BCBEE3 /* ysf.mp3 in CopyFiles */,
 				3F874BA521B656A500BCBEE3 /* 003.mp3 in CopyFiles */,
 				3F874BA221B64EEA00BCBEE3 /* libfmodL.dylib in CopyFiles */,
 				3F874BA121B64EE500BCBEE3 /* libfmodstudioL.dylib in CopyFiles */,
@@ -40,6 +42,7 @@
 		3F60E2CE21B581760094C35F /* SimpleAudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleAudioManager.h; sourceTree = "<group>"; };
 		3F874BA421B656A500BCBEE3 /* 003.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 003.mp3; path = warship/003.mp3; sourceTree = "<group>"; };
 		3F874BA721B67FD300BCBEE3 /* AudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
+		3F874BA821B75C1900BCBEE3 /* ysf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = ysf.mp3; path = warship/ysf.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +72,7 @@
 		3F60E2BA21B531A90094C35F = {
 			isa = PBXGroup;
 			children = (
+				3F874BA821B75C1900BCBEE3 /* ysf.mp3 */,
 				3F874BA421B656A500BCBEE3 /* 003.mp3 */,
 				3F60E2C521B531AA0094C35F /* warship */,
 				3F60E2C421B531AA0094C35F /* Products */,
@@ -101,9 +105,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3F60E2CA21B531AA0094C35F /* Build configuration list for PBXNativeTarget "warship" */;
 			buildPhases = (
+				3F60E2C121B531A90094C35F /* CopyFiles */,
 				3F60E2BF21B531A90094C35F /* Sources */,
 				3F60E2C021B531A90094C35F /* Frameworks */,
-				3F60E2C121B531A90094C35F /* CopyFiles */,
 				3F874BA321B6504F00BCBEE3 /* ShellScript */,
 			);
 			buildRules = (
