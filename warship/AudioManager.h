@@ -137,8 +137,12 @@ void AM::PlaySFX(const std::string &path,
     // calc random volume and pitch
     std::uniform_real_distribution<> new_volume_dist(minVolume, maxVolume);
     std::uniform_real_distribution<> new_pitch_dist(minPitch, maxPitch);
-    float new_volume = max(min(new_volume_dist(rng), 1.0), 0.0);
-    float new_pitch = max(min(new_pitch_dist(rng), 1.0), 0.0);
+    float new_volume = std::fmax(std::fmin(new_volume_dist(rng),
+                                           1.0),
+                                 0.0);
+    float new_pitch = std::fmax(std::fmin(new_pitch_dist(rng),
+                                          1.0),
+                                0.0);
     
     // start a new channel; add to channel group
     // play the sfx with the volume and pitch

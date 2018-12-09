@@ -14,6 +14,7 @@
 		3F874BA221B64EEA00BCBEE3 /* libfmodL.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F210E7921B6392900C52A48 /* libfmodL.dylib */; };
 		3F874BA521B656A500BCBEE3 /* 003.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F874BA421B656A500BCBEE3 /* 003.mp3 */; };
 		3F874BA921B75C1A00BCBEE3 /* ysf.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F874BA821B75C1900BCBEE3 /* ysf.mp3 */; };
+		3F874BAE21BBF7BC00BCBEE3 /* bass-a2.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3F874BAD21BBF7BC00BCBEE3 /* bass-a2.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,6 +24,7 @@
 			dstPath = "/Users/Nerrons/Library/Developer/Xcode/DerivedData/warship-hczfiamwfeunbychlywzjomktuoq/Build/Products/Debug";
 			dstSubfolderSpec = 0;
 			files = (
+				3F874BAE21BBF7BC00BCBEE3 /* bass-a2.wav in CopyFiles */,
 				3F874BA921B75C1A00BCBEE3 /* ysf.mp3 in CopyFiles */,
 				3F874BA521B656A500BCBEE3 /* 003.mp3 in CopyFiles */,
 				3F874BA221B64EEA00BCBEE3 /* libfmodL.dylib in CopyFiles */,
@@ -40,9 +42,14 @@
 		3F60E2C321B531AA0094C35F /* warship */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = warship; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F60E2C621B531AA0094C35F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = warship/main.cpp; sourceTree = SOURCE_ROOT; };
 		3F60E2CE21B581760094C35F /* SimpleAudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleAudioManager.h; sourceTree = "<group>"; };
+		3F65911021BCA32C0030FA48 /* Engine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Engine.cpp; sourceTree = "<group>"; };
 		3F874BA421B656A500BCBEE3 /* 003.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 003.mp3; path = warship/003.mp3; sourceTree = "<group>"; };
 		3F874BA721B67FD300BCBEE3 /* AudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioManager.h; sourceTree = "<group>"; };
 		3F874BA821B75C1900BCBEE3 /* ysf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = ysf.mp3; path = warship/ysf.mp3; sourceTree = "<group>"; };
+		3F874BAA21BB564700BCBEE3 /* Engine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
+		3F874BAB21BBD0F300BCBEE3 /* WarSound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WarSound.h; sourceTree = "<group>"; };
+		3F874BAC21BBE05800BCBEE3 /* WarChannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WarChannel.h; sourceTree = "<group>"; };
+		3F874BAD21BBF7BC00BCBEE3 /* bass-a2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "bass-a2.wav"; path = "warship/bass-a2.wav"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +79,7 @@
 		3F60E2BA21B531A90094C35F = {
 			isa = PBXGroup;
 			children = (
+				3F874BAD21BBF7BC00BCBEE3 /* bass-a2.wav */,
 				3F874BA821B75C1900BCBEE3 /* ysf.mp3 */,
 				3F874BA421B656A500BCBEE3 /* 003.mp3 */,
 				3F60E2C521B531AA0094C35F /* warship */,
@@ -91,9 +99,13 @@
 		3F60E2C521B531AA0094C35F /* warship */ = {
 			isa = PBXGroup;
 			children = (
-				3F60E2C621B531AA0094C35F /* main.cpp */,
 				3F60E2CE21B581760094C35F /* SimpleAudioManager.h */,
 				3F874BA721B67FD300BCBEE3 /* AudioManager.h */,
+				3F60E2C621B531AA0094C35F /* main.cpp */,
+				3F874BAA21BB564700BCBEE3 /* Engine.h */,
+				3F65911021BCA32C0030FA48 /* Engine.cpp */,
+				3F874BAB21BBD0F300BCBEE3 /* WarSound.h */,
+				3F874BAC21BBE05800BCBEE3 /* WarChannel.h */,
 			);
 			path = warship;
 			sourceTree = "<group>";
