@@ -3,7 +3,7 @@ project(warship)
 
 set(CMAKE_CXX_STANDARD 14)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake-find-module")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 find_package(SFML 2.5 COMPONENTS window system REQUIRED)
 find_package(FMOD)
