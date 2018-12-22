@@ -1,2 +1,3 @@
-*.wav
-*.aif
+.DS_Store
+.idea/
+cmake-build-*/
