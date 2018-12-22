@@ -15,7 +15,7 @@ int main(int argc, const char *argv[]) {
     sf::Window window(sf::VideoMode(320, 240), "AudioPlayBack");
     sf::Clock clock;
     Warship ship;
-    ship.Init();
+    Warship::Init();
     ship.LoadSound("resource/003.mp3", false, false, false);
 
     while (window.isOpen()) {
