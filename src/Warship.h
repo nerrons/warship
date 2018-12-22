@@ -22,6 +22,14 @@ public:
     static void Update();
     static void Shutdown();
 
+    struct SoundInfo {
+        string soundName;
+        float defaultVolume;
+        float minDistance;
+        float maxDistance;
+
+    };
+
     void LoadSound(const string& soundName, bool is3D, bool isLooped, bool isStream);
     void UnloadSound(const string& soundName);
     int PlaySound(const string& soundName, const v3f& position, float volume);

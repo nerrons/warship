@@ -3,19 +3,10 @@ project(warship)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(
-        ${PROJECT_SOURCE_DIR}/inc/
-)
-
-link_directories(
-        ${PROJECT_SOURCE_DIR}/deps/
-)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake-find-module")
 
 find_package(SFML 2.5 COMPONENTS window system REQUIRED)
-
-add_library(fmod SHARED IMPORTED)
-set_property(TARGET fmod
-        PROPERTY IMPORTED_LOCATION "/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/warshipped/deps/libfmodL.dylib")
+find_package(FMOD)
 
 add_executable(warship
         src/main.cpp
@@ -26,6 +17,7 @@ target_link_libraries(warship
         sfml-system
         fmod)
 
+# copy resources to exec directory for testing
 add_custom_command(TARGET warship PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/resource $<TARGET_FILE_DIR:warship>/resource)
