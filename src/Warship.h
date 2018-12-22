@@ -24,7 +24,8 @@ public:
 
     void LoadSound(const string& soundName, bool is3D, bool isLooped, bool isStream);
     void UnloadSound(const string& soundName);
-    int PlaySound(const string& soundName, const v3f& position, float dB);
+    int PlaySound(const string& soundName, const v3f& position, float volume);
+    void SetChannelVolume(int channelId, float volume);
 };
 
 

@@ -19,6 +19,17 @@ struct Shipcore {
     ChannelMap channels;
 };
 
+Shipcore::Shipcore()
+: nextChannelId(0) {
+    system = nullptr;
+    FMOD::System_Create(&system);
+    system->init(128, FMOD_INIT_NORMAL, nullptr);
+}
+
+Shipcore::~Shipcore() {
+    system->release();
+}
+
 Shipcore* core = nullptr;
 
 void Warship::Init() {
@@ -105,5 +116,14 @@ int Warship::PlaySound(const string &soundName, const v3f &position, float volum
         core->channels[channelId] = channel;
     }
     return channelId;
+}
+
+void Warship::SetChannelVolume(int channelId, float volume) {
+    auto found = core->channels.find(channelId);
+    if (found == core->channels.end()) {
+        return;
+    }
+
+    found->second->setVolume(volume);
 }
 
