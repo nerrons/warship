@@ -1,4 +1,3 @@
-# warship
-A simple audio engine written in C++.
+# worshcpp
 
-The goal is to provide a simulator of a space, where objects that emit sounds are placed in different rooms, obstacles among them. Aiming for good reverb and attenuation.
+A simple audio engine built under the state machine paradigm, allowing easier extension.

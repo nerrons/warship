@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++  -g -Wl,-search_paths_first -Wl,-headerpad_max_install_names -L/usr/local/opt/readline/lib CMakeFiles/warship.dir/src/main.cpp.o  -o warship  -L/Users/Nerrons/Dropbox/the-ultimate-truth/cpp/worshcpp/deps 
