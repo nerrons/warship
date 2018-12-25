@@ -40,8 +40,8 @@ struct Shipcore {
 
         void Update(float delta);
         void UpdateParams();
-        void UpdateFadeIn(float delta, State currentState);
-        void UpdateFadeOut(float delta, State currentState);
+        void UpdateFadeIn(float delta);
+        void UpdateFadeOut(float delta);
         bool VirtualCheck(bool allowOneshot) const;
         bool IsPlaying() const;
         bool IsOneShot() const;
@@ -192,7 +192,7 @@ void Shipcore::Warchan::Update(float delta) {
             }
             break;
         case State::PREPLAYING:
-            UpdateFadeIn(delta, state);
+            UpdateFadeIn(delta);
         case State::PLAYING:
             UpdateParams();
             if (!IsPlaying() || stopRequested) {
@@ -204,7 +204,7 @@ void Shipcore::Warchan::Update(float delta) {
             }
             break;
         case State::STOPPING:
-            UpdateFadeOut(delta, state);
+            UpdateFadeOut(delta);
             UpdateParams();
             if (!IsPlaying() || volume == 0.0f) {
                 fmodChannel->stop();
@@ -215,7 +215,7 @@ void Shipcore::Warchan::Update(float delta) {
         case State::STOPPED:
             break;
         case State::VIRTING:
-            UpdateFadeOut(delta, state);
+            UpdateFadeOut(delta);
             UpdateParams();
             if (!VirtualCheck(false)) {
                 state = State::PREPLAYING;
@@ -232,7 +232,7 @@ void Shipcore::Warchan::Update(float delta) {
     }
 }
 
-void Shipcore::Warchan::UpdateFadeIn(float delta, State currentState) {
+void Shipcore::Warchan::UpdateFadeIn(float delta) {
     float currentVolume;
     fmodChannel->getVolume(&currentVolume);
     float newVolume = currentVolume + delta / virtFadeInTime;
@@ -245,20 +245,20 @@ void Shipcore::Warchan::UpdateFadeIn(float delta, State currentState) {
     }
 }
 
-void Shipcore::Warchan::UpdateFadeOut(float delta, State currentState) {
+void Shipcore::Warchan::UpdateFadeOut(float delta) {
     float currentVolume;
     fmodChannel->getVolume(&currentVolume);
     float newVolume = currentVolume;
-    if (currentState == State::STOPPING) {
+    if (state == State::STOPPING) {
         newVolume = currentVolume - delta / stopFadeOutTime;
-    } else if (currentState == State::VIRTING) {
+    } else if (state == State::VIRTING) {
         newVolume = currentVolume - delta / virtFadeOutTime;
     }
     if (newVolume <= 0.0f) {
         fmodChannel->stop();
-        if (currentState == State::STOPPING) {
+        if (state == State::STOPPING) {
             state = State::STOPPED;
-        } else if (currentState == State::VIRTING) {
+        } else if (state == State::VIRTING) {
             state = State::VIRT;
         }
     } else {
