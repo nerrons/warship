@@ -14,12 +14,11 @@
 using namespace std;
 
 typedef sf::Vector3<float> v3f;
-typedef map<string, int> SoundIdMap;
 
 class Warship {
 public:
     static void Init();
-    static void Update();
+    static void Update(float delta);
     static void Shutdown();
 
     struct SoundInfo {
@@ -27,13 +26,22 @@ public:
         float defaultVolume;
         float minDistance;
         float maxDistance;
-
+        bool is3D;
+        bool isLooping;
+        bool isStream;
     };
 
-    void LoadSound(const string& soundName, bool is3D, bool isLooped, bool isStream);
-    void UnloadSound(const string& soundName);
-    int PlaySound(const string& soundName, const v3f& position, float volume);
-    void SetChannelVolume(int channelId, float volume);
+    int RegisterSound(SoundInfo& soundInfo, bool loadAfterReg = true);
+    void UnregisterSound(int soundId);
+    void LoadSound(int soundId);
+    void UnloadSound(int soundId);
+    bool SoundLoaded(int soundId);
+    int PlaySound(int soundId, const v3f &position, float volume);
+    void StopSound(int soundId);
+    void SetWarchanVolume(int warchanId, float volume);
+    void StopWarchan(int warchanId);
+    void VirtualizeWarchan(int warchanId);
+    void DevirtualizeWarchan(int warchanId);
 };
 
 

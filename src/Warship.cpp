@@ -1,34 +1,11 @@
-//
+// Warship
+// The user interface.
 // Created by Nerrons on 2018-12-20.
 //
 
+#include <iostream>
 #include "Warship.h"
-
-struct Shipcore {
-    Shipcore();
-    ~Shipcore();
-
-    void Update();
-
-    FMOD::System* system;
-
-    int nextChannelId;
-    typedef map<string, FMOD::Sound*> SoundMap;
-    typedef map<int, FMOD::Channel*> ChannelMap;
-    SoundMap sounds;
-    ChannelMap channels;
-};
-
-Shipcore::Shipcore()
-: nextChannelId(0) {
-    system = nullptr;
-    FMOD::System_Create(&system);
-    system->init(128, FMOD_INIT_NORMAL, nullptr);
-}
-
-Shipcore::~Shipcore() {
-    system->release();
-}
+#include "Shipcore.cpp"
 
 Shipcore* core = nullptr;
 
@@ -36,53 +13,35 @@ void Warship::Init() {
     core = new Shipcore;
 }
 
-void Warship::Update() {
-    core->Update();
+void Warship::Update(float delta) {
+    core->Update(delta);
 }
 
 void Warship::Shutdown() {
     delete core;
 }
 
-void Shipcore::Update() {
-    vector<ChannelMap::iterator> stoppedChannels;
-    for (auto iter = channels.begin(), end = channels.end(); iter != end; iter++) {
-        bool isPlaying = false;
-        iter->second->isPlaying(&isPlaying);
-        if (!isPlaying) {
-            stoppedChannels.push_back(iter);
-        }
+int Warship::RegisterSound(Warship::SoundInfo &soundInfo, bool loadAfterReg) {
+    int soundId = core->nextSoundId;
+    core->nextSoundId++;
+    core->soundInfos[soundId] = &soundInfo;
+    if (loadAfterReg) {
+        core->LoadSound(soundId);
     }
-    for (auto& iter : stoppedChannels) {
-        channels.erase(iter);
-    }
-    system->update();
+    return soundId;
 }
 
-void Warship::LoadSound(const string& soundName, bool is3D, bool isLooping, bool isStream) {
-    // Check if sound is already loaded. If so, do nothing
-    auto found = core->sounds.find(soundName);
-    if (found != core->sounds.end()) {
-        return;
-    }
+void Warship::UnregisterSound(int soundId) {
 
-    // generate mode according to the args passed in
-    FMOD_MODE mode = FMOD_DEFAULT;
-    mode |= is3D ? FMOD_3D : FMOD_2D;
-    mode |= isLooping ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF;
-    mode |= isStream ? FMOD_CREATESTREAM : FMOD_CREATECOMPRESSEDSAMPLE;
-
-    // create the sound and register it in the shipcore
-    FMOD::Sound* sound = nullptr;
-    core->system->createSound(soundName.c_str(), mode, nullptr, &sound);
-    if (sound) {
-        core->sounds[soundName] = sound;
-    }
 }
 
-void Warship::UnloadSound(const string &soundName) {
+void Warship::LoadSound(int soundId) {
+    core->LoadSound(soundId);
+}
+
+void Warship::UnloadSound(int soundId) {
     // Check if sound is loaded. If not, do nothing
-    auto found = core->sounds.find(soundName);
+    auto found = core->sounds.find(soundId);
     if (found == core->sounds.end()) {
         return;
     }
@@ -92,38 +51,59 @@ void Warship::UnloadSound(const string &soundName) {
     core->sounds.erase(found);
 }
 
-int Warship::PlaySound(const string &soundName, const v3f &position, float volume) {
-    int channelId = core->nextChannelId;
-    core->nextChannelId++;
-    auto found = core->sounds.find(soundName);
-
-    // if audio not loaded, try to load. if fails to load, return
-    if (found == core->sounds.end()) { // not loaded; load sound
-        LoadSound(soundName, false, false, false);
-        found = core->sounds.find(soundName);
-        if (found == core->sounds.end()) {
-            return channelId;
-        }
-    }
-
-    FMOD::Channel* channel = nullptr;
-    core->system->playSound(found->second, nullptr, true, &channel);
-    if (channel) {
-        FMOD_VECTOR f_position = { position.x, position.y, position.z };
-        channel->set3DAttributes(&f_position, nullptr);
-        channel->setVolume(volume);
-        channel->setPaused(false);
-        core->channels[channelId] = channel;
-    }
-    return channelId;
+bool Warship::SoundLoaded(int soundId) {
+    return core->SoundLoaded(soundId);
 }
 
-void Warship::SetChannelVolume(int channelId, float volume) {
-    auto found = core->channels.find(channelId);
-    if (found == core->channels.end()) {
+int Warship::PlaySound(int soundId, const v3f &position, float volume) {
+    int warchanId = core->nextWarchanId;
+    core->nextWarchanId++;
+    auto found = core->sounds.find(soundId);
+
+    // if audio not loaded, just consider a fail.
+    if (found == core->sounds.end()) {
+        return warchanId;
+    }
+
+    core->warchans[warchanId] = make_unique<Shipcore::Warchan>(
+            *core, soundId, *(core->soundInfos[soundId]), position, volume);
+    return warchanId;
+}
+
+void Warship::StopSound(int soundId) {
+
+}
+
+void Warship::SetWarchanVolume(int warchanId, float volume) {
+    auto found = core->warchans.find(warchanId);
+    if (found == core->warchans.end()) {
         return;
     }
 
-    found->second->setVolume(volume);
+    found->second->volume = volume;
+    found->second->fmodChannel->setVolume(volume);
 }
 
+void Warship::StopWarchan(int warchanId){
+    auto found = core->warchans.find(warchanId);
+    if (found == core->warchans.end()) {
+        return;
+    }
+    found->second->stopRequested = true;
+}
+
+void Warship::VirtualizeWarchan(int warchanId){
+    auto found = core->warchans.find(warchanId);
+    if (found == core->warchans.end()) {
+        return;
+    }
+    found->second->virtFlag = true;
+}
+
+void Warship::DevirtualizeWarchan(int warchanId){
+    auto found = core->warchans.find(warchanId);
+    if (found == core->warchans.end()) {
+        return;
+    }
+    found->second->virtFlag = false;
+}
