@@ -16,10 +16,14 @@ struct Shipcore {
 
     FMOD::System* system;
 
+    enum class VirtStyle {
+        RESET, PAUSE, MUTE
+    };
+
     // Warchan is a wrapper of FMOD channels.
     struct Warchan {
         Warchan(Shipcore& shipcore, int soundId, Warship::SoundInfo& soundInfo,
-                const v3f& position, float volume);
+                VirtStyle virtStyle, const v3f& position, float volume);
         ~Warchan();
 
         enum class State {
@@ -32,6 +36,7 @@ struct Shipcore {
         v3f position;
         float volume = 1.0f;
         State state = State::INIT;
+        VirtStyle virtStyle;
         bool stopRequested = false;
         bool virtFlag = false;
         float virtFadeInTime = 2.0f;
@@ -78,12 +83,11 @@ Shipcore::~Shipcore() {
     system = nullptr;
 }
 
-Shipcore::Warchan::Warchan(
-        Shipcore &shipcore, int soundId,
-        Warship::SoundInfo &soundInfo,
-        const v3f &position, float volume)
+Shipcore::Warchan::Warchan(Shipcore &shipcore, int soundId, Warship::SoundInfo &soundInfo,
+        VirtStyle virtStyle, const v3f &position, float volume)
         : shipcore(shipcore)
         , soundId(soundId)
+        , virtStyle(virtStyle)
         , position(position) {}
 
 Shipcore::Warchan::~Warchan(){
@@ -99,9 +103,9 @@ void Shipcore::LoadSound(int soundId) {
 
     // generate mode according to the args passed in
     FMOD_MODE mode = FMOD_NONBLOCKING;
-    mode |= info->second->is3D ? FMOD_3D : FMOD_2D;
-    mode |= info->second->isLooping ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF;
-    mode |= info->second->isStream ? FMOD_CREATESTREAM : FMOD_CREATECOMPRESSEDSAMPLE;
+    mode |= info->second->is3D      ?           FMOD_3D : FMOD_2D;
+    mode |= info->second->isLooping ?  FMOD_LOOP_NORMAL : FMOD_LOOP_OFF;
+    mode |= info->second->isStream  ? FMOD_CREATESTREAM : FMOD_CREATECOMPRESSEDSAMPLE;
 
     // create the sound and register it in the shipcore
     FMOD::Sound* sound = nullptr;
@@ -226,7 +230,14 @@ void Shipcore::Warchan::Update(float delta) {
             if (stopRequested) {
                 state = State::STOPPING;
             } else if (!VirtualCheck(false)) {
-                state = State::DEVIRTING;
+                if (virtStyle == VirtStyle::RESET) {
+                    state = State::DEVIRTING;
+                } else if (virtStyle == VirtStyle::PAUSE) {
+                    fmodChannel->setPaused(false);
+                    state = State::PREPLAYING;
+                } else {
+                    state = State::PREPLAYING;
+                }
             }
             break;
     }
@@ -255,11 +266,16 @@ void Shipcore::Warchan::UpdateFadeOut(float delta) {
         newVolume = currentVolume - delta / virtFadeOutTime;
     }
     if (newVolume <= 0.0f) {
-        fmodChannel->stop();
         if (state == State::STOPPING) {
+            fmodChannel->stop();
             state = State::STOPPED;
         } else if (state == State::VIRTING) {
             state = State::VIRT;
+            if (virtStyle == VirtStyle::RESET) {
+                fmodChannel->stop();
+            } else if (virtStyle == VirtStyle::PAUSE) {
+                fmodChannel->setPaused(true);
+            }
         }
     } else {
         fmodChannel->setVolume(newVolume);
