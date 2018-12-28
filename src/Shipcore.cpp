@@ -3,6 +3,12 @@
 // Created by Nerrons on 2018-12-23.
 //
 
+// TODO: Implement positional audio.
+// TODO: Implement Virtual Check.
+// TODO: Implement ear position.
+// TODO: Make some sound effects for testing. (footsteps, drums)
+// TODO: Implement reverb.
+
 #include <iostream>
 #include "Warship.h"
 
@@ -22,6 +28,7 @@ struct Shipcore {
 
     // Warchan is a wrapper of FMOD channels.
     struct Warchan {
+        // TODO: integrate this soundInfo arg into Warchan to prevent searching in the soundInfos map
         Warchan(Shipcore& shipcore, int soundId, Warship::SoundInfo& soundInfo,
                 VirtStyle virtStyle, const v3f& position, float volume);
         ~Warchan();
@@ -52,6 +59,7 @@ struct Shipcore {
         bool IsOneShot() const;
     };
 
+    v3f earPosition;
     int coreSampleRate;
     int nextSoundId;
     int nextWarchanId;
@@ -64,13 +72,18 @@ struct Shipcore {
 };
 
 Shipcore::Shipcore()
-        : nextSoundId(0)
-        , nextWarchanId(0) {
+        : earPosition{ 0.0f, 0.0f, 0.0f }
+        , coreSampleRate(44100)
+        , nextSoundId(0)
+        , nextWarchanId(0){
     system = nullptr;
     FMOD::System_Create(&system);
     FMOD::Debug_Initialize(FMOD_DEBUG_LEVEL_LOG);
     system->init(128, FMOD_INIT_NORMAL, nullptr);
     system->getSoftwareFormat(&coreSampleRate, nullptr, nullptr);
+    FMOD_VECTOR listenerPos = { earPosition.x, earPosition.y, earPosition.z };
+    FMOD_VECTOR listenerVel = { 0.0f, 0.0f, 0.0f };
+    system->set3DListenerAttributes(0, &listenerPos, &listenerVel, nullptr, nullptr);
 }
 
 Shipcore::~Shipcore() {
@@ -183,6 +196,8 @@ void Shipcore::Warchan::Update(float delta) {
                 state = State::PLAYING;
                 FMOD_VECTOR pos{position.x, position.y, position.z};
                 fmodChannel->set3DAttributes(&pos, nullptr);
+                fmodChannel->set3DMinMaxDistance(shipcore.soundInfos[soundId]->minDistance,
+                        shipcore.soundInfos[soundId]->maxDistance);
                 fmodChannel->setVolume(volume);
                 fmodChannel->setPaused(false);
             } else {

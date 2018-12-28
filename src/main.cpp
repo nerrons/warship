@@ -19,9 +19,11 @@ int main(int argc, const char *argv[]) {
     Warship::Init();
     Warship::SoundInfo info;
     info.soundName = "resource/003.mp3";
-    info.is3D = false;
+    info.is3D = true;
     info.isLooping = false;
     info.isStream = false;
+    info.minDistance = 1.0f;
+    info.maxDistance = 20.0f;
     int soundId = ship.RegisterSound(info);
     int warchanId;
     bool virtFlag = false;
@@ -39,7 +41,7 @@ int main(int argc, const char *argv[]) {
             }
             if (e.type == sf::Event::KeyPressed) {
                 if (e.key.code == sf::Keyboard::Space) {
-                    v3f pos{ 0.0f, 0.0f, 0.0f };
+                    v3f pos{ 10.0f, 10.0f, 0.0f };
                     warchanId = ship.PlaySound(soundId, pos, 1.0);
                     warchanIds.push_back(warchanId);
                 }
