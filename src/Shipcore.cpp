@@ -28,8 +28,7 @@ struct Shipcore {
 
     // Warchan is a wrapper of FMOD channels.
     struct Warchan {
-        // TODO: integrate this soundInfo arg into Warchan to prevent searching in the soundInfos map
-        Warchan(Shipcore& shipcore, int soundId, Warship::SoundInfo& soundInfo,
+        Warchan(Shipcore& shipcore, int soundId, Warship::SoundInfo* soundInfo,
                 VirtStyle virtStyle, const v3f& position, float volume);
         ~Warchan();
 
@@ -39,6 +38,8 @@ struct Shipcore {
 
         Shipcore& shipcore;
         FMOD::Channel* fmodChannel = nullptr;
+        Warship::SoundInfo* soundInfo;
+
         int soundId;
         v3f position;
         float volume = 1.0f;
@@ -96,9 +97,10 @@ Shipcore::~Shipcore() {
     system = nullptr;
 }
 
-Shipcore::Warchan::Warchan(Shipcore &shipcore, int soundId, Warship::SoundInfo &soundInfo,
+Shipcore::Warchan::Warchan(Shipcore &shipcore, int soundId, Warship::SoundInfo *soundInfo,
         VirtStyle virtStyle, const v3f &position, float volume)
         : shipcore(shipcore)
+        , soundInfo(soundInfo)
         , soundId(soundId)
         , virtStyle(virtStyle)
         , position(position) {}
@@ -196,8 +198,7 @@ void Shipcore::Warchan::Update(float delta) {
                 state = State::PLAYING;
                 FMOD_VECTOR pos{position.x, position.y, position.z};
                 fmodChannel->set3DAttributes(&pos, nullptr);
-                fmodChannel->set3DMinMaxDistance(shipcore.soundInfos[soundId]->minDistance,
-                        shipcore.soundInfos[soundId]->maxDistance);
+                fmodChannel->set3DMinMaxDistance(soundInfo->minDistance, soundInfo->maxDistance);
                 fmodChannel->setVolume(volume);
                 fmodChannel->setPaused(false);
             } else {
