@@ -21,6 +21,10 @@ void Warship::Shutdown() {
     delete core;
 }
 
+void Warship::SetEarPosition(const v3f &newPosition, bool isRelative) {
+    core->SetEarPosition(newPosition, isRelative);
+}
+
 int Warship::RegisterSound(Warship::SoundInfo &soundInfo, bool loadAfterReg) {
     int soundId = core->nextSoundId;
     core->nextSoundId++;
@@ -42,13 +46,11 @@ void Warship::LoadSound(int soundId) {
 void Warship::UnloadSound(int soundId) {
     // Check if sound is loaded. If not, do nothing
     auto found = core->sounds.find(soundId);
-    if (found == core->sounds.end()) {
-        return;
+    if (found != core->sounds.end()) {
+        // Sound needs to be unloaded
+        found->second->release();
+        core->sounds.erase(found);
     }
-
-    // Sound needs to be unloaded
-    found->second->release();
-    core->sounds.erase(found);
 }
 
 bool Warship::SoundLoaded(int soundId) {
@@ -77,34 +79,45 @@ void Warship::StopSound(int soundId) {
 
 void Warship::SetWarchanVolume(int warchanId, float volume) {
     auto found = core->warchans.find(warchanId);
-    if (found == core->warchans.end()) {
-        return;
+    if (found != core->warchans.end()) {
+        found->second->volume = volume;
+        found->second->fmodChannel->setVolume(volume);
     }
+}
 
-    found->second->volume = volume;
-    found->second->fmodChannel->setVolume(volume);
+void Warship::SetWarchanPosition(int warchanId, const v3f &newPosition, bool isRelative) {
+    auto found = core->warchans.find(warchanId);
+    if (found != core->warchans.end()) {
+        auto &warchan = found->second;
+        warchan->positionChangeFlag = true;
+        if(isRelative) {
+            v3f newPos = { warchan->position.x + newPosition.x,
+                           warchan->position.y + newPosition.y,
+                           warchan->position.z + newPosition.z };
+            warchan->position = newPos;
+        } else {
+            warchan->position = newPosition;
+        }
+    }
 }
 
 void Warship::StopWarchan(int warchanId){
     auto found = core->warchans.find(warchanId);
-    if (found == core->warchans.end()) {
-        return;
+    if (found != core->warchans.end()) {
+        found->second->stopRequested = true;
     }
-    found->second->stopRequested = true;
 }
 
 void Warship::VirtualizeWarchan(int warchanId){
     auto found = core->warchans.find(warchanId);
     if (found == core->warchans.end()) {
-        return;
+        found->second->virtFlag = true;
     }
-    found->second->virtFlag = true;
 }
 
 void Warship::DevirtualizeWarchan(int warchanId){
     auto found = core->warchans.find(warchanId);
     if (found == core->warchans.end()) {
-        return;
+        found->second->virtFlag = false;
     }
-    found->second->virtFlag = false;
 }

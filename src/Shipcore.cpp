@@ -3,11 +3,11 @@
 // Created by Nerrons on 2018-12-23.
 //
 
-// TODO: Implement positional audio.
 // TODO: Implement Virtual Check.
-// TODO: Implement ear position.
 // TODO: Make some sound effects for testing. (footsteps, drums)
-// TODO: Implement reverb.
+// TODO: Implement ambient reverb and updating reverb params according to the ear position.
+// TODO: Implement walls, obstruction and occlution.
+// TODO: Make sounds movable by supporting callback functions that changes the position of a sound
 
 #include <iostream>
 #include "Warship.h"
@@ -16,6 +16,7 @@ struct Shipcore {
     Shipcore();
     ~Shipcore();
 
+    void SetEarPosition(const v3f &newPosition, bool isRelative);
     void Update(float delta);
     bool SoundLoaded(int soundId);
     void LoadSound(int soundId);
@@ -41,15 +42,19 @@ struct Shipcore {
         Warship::SoundInfo* soundInfo;
 
         int soundId;
-        v3f position;
-        float volume = 1.0f;
-        State state = State::INIT;
         VirtStyle virtStyle;
-        bool stopRequested = false;
-        bool virtFlag = false;
+        float virtDistance;
         float virtFadeInTime = 2.0f;
         float virtFadeOutTime = 2.0f;
         float stopFadeOutTime = 4.0f;
+
+        State state = State::INIT;
+        float volume = 1.0f;
+        bool stopRequested = false;
+        v3f position;
+        bool positionChangeFlag = false;
+        bool virtFlagIsEffective = false;
+        bool virtFlag = false;
 
         void Update(float delta);
         void UpdateParams();
@@ -103,10 +108,28 @@ Shipcore::Warchan::Warchan(Shipcore &shipcore, int soundId, Warship::SoundInfo *
         , soundInfo(soundInfo)
         , soundId(soundId)
         , virtStyle(virtStyle)
+        , virtDistance(soundInfo->virtDistance)
         , position(position) {}
 
 Shipcore::Warchan::~Warchan(){
 
+}
+
+void Shipcore::SetEarPosition(const v3f &newPosition, bool isRelative) {
+    FMOD_VECTOR listenerPos;
+    FMOD_VECTOR listenerVel;
+    if (isRelative) {
+        listenerPos = { earPosition.x + newPosition.x,
+                        earPosition.y + newPosition.y,
+                        earPosition.z + newPosition.z };
+        listenerVel = { 0.0f, 0.0f, 0.0f };
+    } else {
+        listenerPos = { newPosition.x, newPosition.y, newPosition.z };
+        listenerVel = { 0.0f, 0.0f, 0.0f };
+    }
+    earPosition = { listenerPos.x, listenerPos.y, listenerPos.z };
+    cout << earPosition.x << " " << earPosition.y << " " << earPosition.z << endl;
+    system->set3DListenerAttributes(0, &listenerPos, &listenerVel, nullptr, nullptr);
 }
 
 void Shipcore::LoadSound(int soundId) {
@@ -311,9 +334,15 @@ bool Shipcore::Warchan::IsOneShot() const {
 }
 
 void Shipcore::Warchan::UpdateParams() {
-
+    if (positionChangeFlag) {
+        FMOD_VECTOR newPos = { position.x, position.y, position.z };
+        fmodChannel->set3DAttributes(&newPos, nullptr);
+        positionChangeFlag = false;
+    }
 }
 
 bool Shipcore::Warchan::VirtualCheck(bool allowOneshot) const {
-    return virtFlag;
+    if (virtFlagIsEffective) {
+        return virtFlag;
+    } 
 }

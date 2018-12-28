@@ -26,11 +26,13 @@ public:
         float defaultVolume;
         float minDistance;
         float maxDistance;
+        float virtDistance;
         bool is3D;
         bool isLooping;
         bool isStream;
     };
 
+    void SetEarPosition(const v3f &newPosition, bool isRelative);
     int RegisterSound(SoundInfo& soundInfo, bool loadAfterReg = true);
     void UnregisterSound(int soundId);
     void LoadSound(int soundId);
@@ -39,6 +41,7 @@ public:
     int PlaySound(int soundId, const v3f &position, float volume);
     void StopSound(int soundId);
     void SetWarchanVolume(int warchanId, float volume);
+    void SetWarchanPosition(int warchanId, const v3f &newPosition, bool isRelative);
     void StopWarchan(int warchanId);
     void VirtualizeWarchan(int warchanId);
     void DevirtualizeWarchan(int warchanId);
