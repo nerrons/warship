@@ -8,6 +8,7 @@
 // TODO: Implement ambient reverb and updating reverb params according to the ear position.
 // TODO: Implement walls, obstruction and occlution.
 // TODO: Make sounds movable by supporting callback functions that changes the position of a sound
+// TODO: Different virtCheckPeriod for different states (longer when in virt, shorter in playing)
 
 #include <iostream>
 #include "Warship.h"
@@ -43,6 +44,8 @@ struct Shipcore {
 
         int soundId;
         VirtStyle virtStyle;
+        float virtClock = 0.0f;
+        float virtCheckPeriod = 1.0f;
         float virtDistance;
         float virtFadeInTime = 2.0f;
         float virtFadeOutTime = 2.0f;
@@ -60,7 +63,7 @@ struct Shipcore {
         void UpdateParams();
         void UpdateFadeIn(float delta);
         void UpdateFadeOut(float delta);
-        bool VirtualCheck(bool allowOneshot) const;
+        bool VirtualCheck(bool allowOneshot, float delta);
         bool IsPlaying() const;
         bool IsOneShot() const;
     };
@@ -190,7 +193,7 @@ void Shipcore::Warchan::Update(float delta) {
             }
 
             // TOPLAY -> STOPPING / VIRT
-            if (VirtualCheck(true)) {
+            if (VirtualCheck(true, delta)) {
                 if (IsOneShot()) { // change this to oneshot check
                     state = State::STOPPING;
                 } else {
@@ -242,7 +245,7 @@ void Shipcore::Warchan::Update(float delta) {
                 state = State::STOPPING;
                 return;
             }
-            if (VirtualCheck(false)) {
+            if (VirtualCheck(false, delta)) {
                 state = State::VIRTING;
             }
             break;
@@ -260,15 +263,14 @@ void Shipcore::Warchan::Update(float delta) {
         case State::VIRTING:
             UpdateFadeOut(delta);
             UpdateParams();
-            if (!VirtualCheck(false)) {
+            if (!VirtualCheck(false, delta)) {
                 state = State::PREPLAYING;
-                break;
             }
             break;
         case State::VIRT:
             if (stopRequested) {
                 state = State::STOPPING;
-            } else if (!VirtualCheck(false)) {
+            } else if (!VirtualCheck(false, delta)) {
                 if (virtStyle == VirtStyle::RESET) {
                     state = State::DEVIRTING;
                 } else if (virtStyle == VirtStyle::PAUSE) {
@@ -314,6 +316,8 @@ void Shipcore::Warchan::UpdateFadeOut(float delta) {
                 fmodChannel->stop();
             } else if (virtStyle == VirtStyle::PAUSE) {
                 fmodChannel->setPaused(true);
+            } else if (virtStyle == VirtStyle::MUTE) {
+                fmodChannel->setVolume(0.0f);
             }
         }
     } else {
@@ -328,7 +332,7 @@ bool Shipcore::Warchan::IsPlaying() const {
 }
 
 bool Shipcore::Warchan::IsOneShot() const {
-    int loopCount = true;
+    int loopCount = 0;
     fmodChannel->getLoopCount(&loopCount);
     return (loopCount == 0);
 }
@@ -341,8 +345,18 @@ void Shipcore::Warchan::UpdateParams() {
     }
 }
 
-bool Shipcore::Warchan::VirtualCheck(bool allowOneshot) const {
-    if (virtFlagIsEffective) {
+bool Shipcore::Warchan::VirtualCheck(bool allowOneshot, float delta) {
+    if (virtClock < virtCheckPeriod) {
+        virtClock += delta;
+        return (state == State::VIRTING || state == State::VIRT);
+    } else if (virtFlagIsEffective) {
         return virtFlag;
-    } 
+    } else {
+        v3f &earPos = shipcore.earPosition;
+        float delta_x = position.x - earPos.x;
+        float delta_y = position.y - earPos.y;
+        float delta_z = position.z - earPos.z;
+        float distance_sq = delta_x * delta_x + delta_y * delta_y + delta_z * delta_z;
+        return (distance_sq > virtDistance * virtDistance);
+    }
 }

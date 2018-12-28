@@ -69,7 +69,7 @@ int Warship::PlaySound(int soundId, const v3f &position, float volume) {
 
     core->warchans[warchanId] = make_unique<Shipcore::Warchan>(
             *core, soundId, core->soundInfos[soundId],
-            Shipcore::VirtStyle::RESET, position, volume);
+            Shipcore::VirtStyle::MUTE, position, volume);
     return warchanId;
 }
 
