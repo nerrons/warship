@@ -7,7 +7,6 @@
 // TODO: Implement ambient reverb and updating reverb params according to the ear position.
 // TODO: Implement walls, obstruction and occlution.
 // TODO: Make sounds movable by supporting callback functions that changes the position of a sound
-// TODO: Different virtCheckPeriod for different states (longer when in virt, shorter in playing)
 
 #include <iostream>
 #include <bitset>
@@ -48,9 +47,10 @@ struct Shipcore {
 
         int soundId;
         VirtStyle virtStyle;
-        float virtClock = 0.0f;
-        float virtCheckPeriod = 1.0f;
         float virtDistance;
+        float virtClock = 0.0f;
+        float virtCheckPeriodForPlaying = 0.5f;
+        float virtCheckPeriodForVirt = 1.0f;
         float virtFadeInTime = 2.0f;
         float virtFadeOutTime = 2.0f;
         float stopFadeOutTime = 4.0f;
@@ -59,7 +59,6 @@ struct Shipcore {
         float volume = 1.0f;
         bool stopRequested = false;
         v3f position;
-        bool positionChangeFlag = false;
         bool virtFlagIsEffective = false;
         bool virtFlag = false;
         bitset<8> updateFlags;
@@ -256,8 +255,10 @@ void Shipcore::Warchan::Update(float delta) {
                 state = State::STOPPING;
                 return;
             }
-            if (VirtualCheck(false, delta)) {
-                state = State::VIRTING;
+            if (virtClock < virtCheckPeriodForPlaying) {
+                if (VirtualCheck(false, delta)) {
+                    state = State::VIRTING;
+                }
             }
             break;
         case State::STOPPING:
@@ -357,11 +358,12 @@ void Shipcore::Warchan::UpdateParams() {
 }
 
 bool Shipcore::Warchan::VirtualCheck(bool allowOneshot, float delta) {
-    if (virtClock < virtCheckPeriod) {
+    if (virtClock < virtCheckPeriodForVirt) {
         return (state == State::VIRTING || state == State::VIRT);
     } else if (virtFlagIsEffective) {
         return virtFlag;
     } else {
+        virtClock = 0.0f;
         v3f &earPos = shipcore.earPosition;
         float delta_x = position.x - earPos.x;
         float delta_y = position.y - earPos.y;
