@@ -89,7 +89,7 @@ void Warship::SetWarchanPosition(int warchanId, const v3f &newPosition, bool isR
     auto found = core->warchans.find(warchanId);
     if (found != core->warchans.end()) {
         auto &warchan = found->second;
-        warchan->positionChangeFlag = true;
+        warchan->SetUpdateFlag(Shipcore::Warchan::UpdateFlag::POSITION, true);
         if(isRelative) {
             v3f newPos = { warchan->position.x + newPosition.x,
                            warchan->position.y + newPosition.y,

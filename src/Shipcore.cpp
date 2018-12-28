@@ -3,7 +3,6 @@
 // Created by Nerrons on 2018-12-23.
 //
 
-// TODO: Implement Virtual Check.
 // TODO: Make some sound effects for testing. (footsteps, drums)
 // TODO: Implement ambient reverb and updating reverb params according to the ear position.
 // TODO: Implement walls, obstruction and occlution.
@@ -11,6 +10,7 @@
 // TODO: Different virtCheckPeriod for different states (longer when in virt, shorter in playing)
 
 #include <iostream>
+#include <bitset>
 #include "Warship.h"
 
 struct Shipcore {
@@ -38,6 +38,10 @@ struct Shipcore {
             INIT, TOPLAY, DEVIRTING, LOADING, PREPLAYING, PLAYING, VIRTING, VIRT, STOPPING, STOPPED
         };
 
+        enum class UpdateFlag : short {
+            POSITION = 0, VOLUME
+        };
+
         Shipcore& shipcore;
         FMOD::Channel* fmodChannel = nullptr;
         Warship::SoundInfo* soundInfo;
@@ -58,7 +62,9 @@ struct Shipcore {
         bool positionChangeFlag = false;
         bool virtFlagIsEffective = false;
         bool virtFlag = false;
+        bitset<8> updateFlags;
 
+        void SetUpdateFlag(UpdateFlag updateFlag, bool flag);
         void Update(float delta);
         void UpdateParams();
         void UpdateFadeIn(float delta);
@@ -178,8 +184,13 @@ void Shipcore::Update(float delta) {
     system->update();
 }
 
+void Shipcore::Warchan::SetUpdateFlag(UpdateFlag updateFlag, bool flag) {
+    updateFlags.set(static_cast<size_t>(updateFlag), flag);
+}
+
 // The main update function for each warchan.
 void Shipcore::Warchan::Update(float delta) {
+    virtClock += delta;
     switch(state) {
         case State::INIT:
             [[fallthrough]];
@@ -338,16 +349,15 @@ bool Shipcore::Warchan::IsOneShot() const {
 }
 
 void Shipcore::Warchan::UpdateParams() {
-    if (positionChangeFlag) {
+    if (updateFlags.test(static_cast<size_t>(UpdateFlag::POSITION))) {
         FMOD_VECTOR newPos = { position.x, position.y, position.z };
         fmodChannel->set3DAttributes(&newPos, nullptr);
-        positionChangeFlag = false;
+        SetUpdateFlag(UpdateFlag::POSITION, false);
     }
 }
 
 bool Shipcore::Warchan::VirtualCheck(bool allowOneshot, float delta) {
     if (virtClock < virtCheckPeriod) {
-        virtClock += delta;
         return (state == State::VIRTING || state == State::VIRT);
     } else if (virtFlagIsEffective) {
         return virtFlag;
