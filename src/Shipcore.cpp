@@ -136,7 +136,6 @@ void Shipcore::SetEarPosition(const v3f &newPosition, bool isRelative) {
         listenerVel = { 0.0f, 0.0f, 0.0f };
     }
     earPosition = { listenerPos.x, listenerPos.y, listenerPos.z };
-    cout << earPosition.x << " " << earPosition.y << " " << earPosition.z << endl;
     system->set3DListenerAttributes(0, &listenerPos, &listenerVel, nullptr, nullptr);
 }
 

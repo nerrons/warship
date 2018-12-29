@@ -37,7 +37,7 @@ int main(int argc, const char *argv[]) {
     int warchanId;
     bool virtFlag = false;
     vector<int> warchanIds;
-    v3f soundPos{ 10.0f, 10.0f, 0.0f };
+    v3f soundPos{ 8.0f, 8.0f, 0.0f };
     v3f earPos{ 0.0f, 0.0f, 0.0f };
 
     while (window.isOpen()) {
@@ -45,6 +45,23 @@ int main(int argc, const char *argv[]) {
         if (elapsed < 1.0f / 60.0f) continue;
 
         clock.restart();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            ship.SetEarPosition({ 0.0f, 0.04f, 0.0f }, true);
+            earPos += { 0.0f, 0.04f, 0.0f };
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            ship.SetEarPosition({ 0.0f, -0.04f, 0.0f }, true);
+            earPos += { 0.0f, -0.04f, 0.0f };
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            ship.SetEarPosition({ -0.04f, 0.0f, 0.0f }, true);
+            earPos += { -0.04f, 0.0f, 0.0f };
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            ship.SetEarPosition({ 0.04f, 0.0f, 0.0f }, true);
+            earPos += { 0.04f, 0.0f, 0.0f };
+        }
+
         sf::Event e;
         while (window.pollEvent(e)) {
             if (e.type == sf::Event::Closed) {
@@ -81,24 +98,7 @@ int main(int argc, const char *argv[]) {
                     }
                     cout << " --- A" << endl;
                 }
-                if (e.key.code == sf::Keyboard::Up) {
-                    ship.SetEarPosition({ 0.0f, 1.0f, 0.0f }, true);
-                    earPos += { 0.0f, 1.0f, 0.0f };
-                    cout << v3f_str(earPos) << endl;
-                }
-                if (e.key.code == sf::Keyboard::Down) {
-                    ship.SetEarPosition({ 0.0f, -1.0f, 0.0f }, true);
-                    earPos += { 0.0f, -1.0f, 0.0f };
-                    cout << v3f_str(earPos) << endl;
-                }
-                if (e.key.code == sf::Keyboard::Left) {
-                    ship.SetEarPosition({ -1.0f, 0.0f, 0.0f }, true);
-                    earPos += { -1.0f, 0.0f, 0.0f };
-                    cout << v3f_str(earPos) << endl;
-                }
-                if (e.key.code == sf::Keyboard::Right) {
-                    ship.SetEarPosition({ 1.0f, 0.0f, 0.0f }, true);
-                    earPos += { 1.0f, 0.0f, 0.0f };
+                if (e.key.code == sf::Keyboard::E) {
                     cout << v3f_str(earPos) << endl;
                 }
             }
