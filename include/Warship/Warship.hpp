@@ -5,7 +5,7 @@
 #ifndef WARSHIP_WARSHIP_H
 #define WARSHIP_WARSHIP_H
 
-#include <SFML/System/Vector3.hpp>
+#include <SFML/Vector3.hpp>
 #include <string>
 #include <vector>
 #include <map>
